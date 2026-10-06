@@ -7,14 +7,14 @@ typedef struct {
   int priority;
 } Container;
 
-static void swap(Container *a, Container *b) {
+void swap(Container *a, Container *b) {
   Container t = *a;
   *a = *b;
   *b = t; /* ID and priority move together */
 }
 
 /* Heapifying down: used in build and after deletion */
-static void heapify_down(Container h[], int n, int i) {
+void heapify_down(Container h[], int n, int i) {
   for (;;) {
     int largest = i, l = 2 * i + 1, r = 2 * i + 2;
     if (l < n && h[l].priority > h[largest].priority)
@@ -31,7 +31,7 @@ static void heapify_down(Container h[], int n, int i) {
 }
 
 /* Heapify up: used after insertion */
-static void heapify_up(Container h[], int i) {
+void heapify_up(Container h[], int i) {
   while (i > 0 && h[(i - 1) / 2].priority < h[i].priority) {
     int p = (i - 1) / 2;
     swap(&h[i], &h[p]);
@@ -41,12 +41,12 @@ static void heapify_up(Container h[], int i) {
   }
 }
 
-static void build_max_heap(Container h[], int n) {
+void build_max_heap(Container h[], int n) {
   for (int i = n / 2 - 1; i >= 0; i--)
     heapify_down(h, n, i);
 }
 
-static int insert(Container h[], int *n, Container c) {
+int insert(Container h[], int *n, Container c) {
   if (*n >= MAX_SIZE) {
     printf("Heap full\n");
     return 0;
@@ -58,7 +58,7 @@ static int insert(Container h[], int *n, Container c) {
 }
 
 /* Remove a specific container by ID (not only the root) */
-static int delete_by_id(Container h[], int *n, char id) {
+int delete_by_id(Container h[], int *n, char id) {
   int idx = -1;
   for (int i = 0; i < *n; i++)
     if (h[i].id == id) {
@@ -81,14 +81,14 @@ static int delete_by_id(Container h[], int *n, char id) {
   return 1;
 }
 
-static void print_array(const Container h[], int n) {
+void print_array(const Container h[], int n) {
   printf("Array: [");
   for (int i = 0; i < n; i++)
     printf("%s%c:%d", i ? ", " : "", h[i].id, h[i].priority);
   printf("]\n");
 }
 
-static void print_tree(const Container h[], int n) {
+void print_tree(const Container h[], int n) {
   printf("Tree (parent -> children):\n");
   for (int i = 0; i < n; i++) {
     int l = 2 * i + 1, r = 2 * i + 2;
@@ -101,14 +101,14 @@ static void print_tree(const Container h[], int n) {
   }
 }
 
-static int is_max_heap(const Container h[], int n) {
+int is_max_heap(const Container h[], int n) {
   for (int i = 1; i < n; i++)
     if (h[(i - 1) / 2].priority < h[i].priority)
       return 0;
   return 1;
 }
 
-static void show(const char *title, const Container h[], int n) {
+void show(const char *title, const Container h[], int n) {
   printf("\n=== %s ===\n", title);
   print_array(h, n);
   print_tree(h, n);
